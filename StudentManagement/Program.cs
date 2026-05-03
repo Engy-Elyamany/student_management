@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualBasic;
+﻿using StudentManagement.Models;
+using StudentManagement.Helpers;
+using StudentManagement.UI;
 
 namespace StudentManagement
 {
@@ -6,10 +8,17 @@ namespace StudentManagement
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Student Management System");
             Services.StudentService service = new Services.StudentService();
-            service.Add_Student();
-            service.View_All_Students();
+
+            int userChoice = 1;
+            while (userChoice != 0)
+            {
+               
+                
+            }
 
         }
+
     }
-}
+    }

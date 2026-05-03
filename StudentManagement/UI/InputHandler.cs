@@ -10,33 +10,52 @@ namespace StudentManagement.UI
 {
     internal class InputHandler
     {
-        public static Student  Get_New_Student_Data()
+        public static Student Get_New_Student_Data()
         {
             Console.WriteLine("Enter Student Name");
-            string std_name = Validator.get_valid_string();
+            string std_name = Validator.GetValidName();
 
             Console.WriteLine("Enter Student Age");
-            int std_age;
-            while (!int.TryParse(Console.ReadLine(), out std_age))
-            {
-                Console.WriteLine("Invalid Age! Please Enter integers only");
-            }
+            int std_age = Validator.GetValidAge();
 
             Console.WriteLine("Enter Student Email");
-            string std_email = Validator.get_valid_string();
+            string std_email = Validator.GetValidEmail();
 
 
             Console.WriteLine("Enter Course Name");
-            string course_name = Validator.get_valid_string();
+            string course_name = Validator.GetValidCourseName();
 
 
-            
-            string std_grades;
+
+            List<int> std_grades;
             Console.WriteLine("Enter student Grades");
-            std_grades = Validator.get_valid_string();
+            std_grades = Validator.GetValidGrades();
 
-            return new Student(std_name, std_age, std_email, course_name);
+            Student new_student = new Student(std_name, std_age, std_email, course_name);
+            new_student.Grades = std_grades;
+            return new_student;
         }
 
+        public static int GetValidUserChoiceFromMenu(int MenuStart, int MenuRangeEnd)
+        {
+            Console.WriteLine("Please Choose From Menu");
+            while (true)
+            {
+                if (int.TryParse(Console.ReadLine(), out int Choice))
+                {
+                    if (Choice > MenuRangeEnd || Choice < MenuStart)
+                    {
+                        Console.WriteLine("Invalid Input, out of range, Please choose from Menu ");
+                        continue;
+                    }
+                    return Choice;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Input, please enter only digits");
+                }
+            }
+
+        }
     }
 }
