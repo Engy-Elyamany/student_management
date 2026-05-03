@@ -1,29 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Xml.Linq;
-
-namespace StudentManagement.Helpers
+﻿namespace StudentManagement.Helpers
 {
     internal static class Validator
     {
+        // Returns true if the string contains any digit or any non-letter non-space character.
+        // Used to reject names and course names that contain numbers or special characters.
         public static bool IsContainDigitsOrChar(string value)
         {
-            for (int i = 0; i < value.Length; i++)
+            foreach (char c in value)
             {
-                if (char.IsLetterOrDigit(value[i]))
-                {
-                    if (char.IsDigit(value[i]))
-                        return true;
-                }
-                else
-                {
-                    if (char.IsWhiteSpace(value[i]))
-                        return false;
+                if (!char.IsLetter(c) && !char.IsWhiteSpace(c))
                     return true;
-                }
             }
             return false;
         }
+
+        // Keeps prompting until the user enters a non-empty, non-whitespace string.
         private static string GetValidString(string fieldName)
         {
             while (true)
@@ -31,7 +22,7 @@ namespace StudentManagement.Helpers
                 string? value = Console.ReadLine()?.Trim();
                 if (!string.IsNullOrEmpty(value))
                     return value;
-                Console.WriteLine($"  [!] {fieldName} cannot be empty or a digit. Try again: ");
+                Console.WriteLine($"  {fieldName} cannot be empty. Try again: ");
             }
         }
 
@@ -43,12 +34,14 @@ namespace StudentManagement.Helpers
                 string name = GetValidString("Name");
                 if (IsContainDigitsOrChar(name) || name.Length < 3)
                 {
-                    Console.WriteLine("  [!] Name must be string and at least 3 characters. Try again: ");
+                    Console.WriteLine("  Name must be at least 3 characters and contain letters only. Try again: ");
                     continue;
                 }
                 return name;
             }
         }
+
+        // Course name must contain only letters and spaces, no digits or special characters.
         public static string GetValidCourseName()
         {
             while (true)
@@ -56,7 +49,7 @@ namespace StudentManagement.Helpers
                 string name = GetValidString("Course Name");
                 if (IsContainDigitsOrChar(name))
                 {
-                    Console.WriteLine("  [!] Course Name must be string. Try again: ");
+                    Console.WriteLine("  Course name must contain letters only. Try again: ");
                     continue;
                 }
                 return name;
@@ -68,8 +61,7 @@ namespace StudentManagement.Helpers
         {
             int age;
             while (!int.TryParse(Console.ReadLine(), out age) || age < 16 || age > 60)
-                Console.WriteLine("  [!] Age must be a number between 16 and 60. Try again: ");
-
+                Console.WriteLine("  Age must be a number between 16 and 60. Try again: ");
             return age;
         }
 
@@ -81,11 +73,12 @@ namespace StudentManagement.Helpers
                 string email = GetValidString("Email");
                 if (email.Contains('@') && email.Contains('.'))
                     return email;
-                Console.WriteLine("  [!] Email must contain '@' and '.'. Try again: ");
+                Console.WriteLine("  Email must contain '@' and '.'. Try again: ");
             }
         }
 
-        // Grades are comma-separated integers each between 0 and 100
+        // Grades are entered as comma-separated values e.g. 80,90,75
+        // Each grade must be a whole number between 0 and 100.
         public static List<int> GetValidGrades()
         {
             while (true)
@@ -101,7 +94,7 @@ namespace StudentManagement.Helpers
                         grades.Add(g);
                     else
                     {
-                        Console.WriteLine($"  [!] '{part.Trim()}' is not valid. Each grade must be a number 0-100. Try again: ");
+                        Console.WriteLine($"  '{part.Trim()}' is not valid. Each grade must be a number between 0 and 100. Try again: ");
                         valid = false;
                         break;
                     }

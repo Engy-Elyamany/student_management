@@ -1,20 +1,32 @@
 ﻿using StudentManagement.Helpers;
 using StudentManagement.Models;
 using StudentManagement.UI;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StudentManagement.Services
 {
     internal class StudentService
     {
+        // Auto-increments with each new student. 
         int idCounter = 0;
 
+        // The in-memory list that holds all students for the duration of the program.
         public List<Student> All_Students = new List<Student>();
 
+
+        // ── PRIVATE HELPERS ──────────────────────────────────────────────────
+        // Returns the student with the given ID, or null if not found.
+        private Student? FindById(int std_id)
+        {
+            foreach (var student in All_Students)
+            {
+                if (student.Id == std_id)
+                    return student;
+            }
+
+            return null;
+        }
+
+        // ── VIEW ALL ─────────────────────────────────────────────────────────
         public void View_All_Students()
         {
             OutputHandler.ViewListOfStudents(All_Students);
@@ -26,10 +38,13 @@ namespace StudentManagement.Services
             Student newStudent = InputHandler.Get_New_Student_Data();
             newStudent.Id = ++idCounter;
             All_Students.Add(newStudent);
-            Console.WriteLine("     Student added successfully.");
+            Console.WriteLine("  Student added successfully.");
         }
 
 
+        // ── SEARCH ───────────────────────────────────────────────────────────
+
+        // Searches by exact ID match.
         public void SearchStudent(int std_id)
         {
             List<Student> matchedStudents = new List<Student>();
@@ -42,15 +57,16 @@ namespace StudentManagement.Services
 
             if (matchedStudents.Count == 0)
             {
-                Console.WriteLine("Student Not Found");
+                Console.WriteLine("  Student not found.");
                 return;
             }
 
-            Console.WriteLine("Matched Result To Yor Search: ");
+            Console.WriteLine("  Search results:");
             OutputHandler.ViewListOfStudents(matchedStudents);
         }
 
-        // case-insensitive comparison so "ahmed" matches "Ahmed"
+        // Searches by partial name match, case-insensitive.
+        // Returns all students whose name contains the search term.
         public void SearchStudent(string name)
         {
             List<Student> matchedStudents = new List<Student>();
@@ -63,36 +79,25 @@ namespace StudentManagement.Services
 
             if (matchedStudents.Count == 0)
             {
-                Console.WriteLine("Student Not Found");
+                Console.WriteLine("  Student not found.");
                 return;
             }
 
-
-
-            Console.WriteLine("Matched Result To Yor Search: ");
+            Console.WriteLine("  Search results:");
             OutputHandler.ViewListOfStudents(matchedStudents);
 
         }
 
 
+        
 
-        private Student? FindById(int std_id)
-        {
-            foreach (var student in All_Students)
-            {
-                if (student.Id == std_id)
-                    return student;
-            }
-
-            return null;
-        }
-
+        // ── UPDATE ───────────────────────────────────────────────────────────
         public void UpdateStudent(int std_id)
         {
             Student? currentStudent = FindById(std_id);
             if (currentStudent == null)
             {
-                Console.WriteLine("  [!] Student not found.");
+                Console.WriteLine("  Student not found.");
                 return;
             }
 
@@ -105,27 +110,28 @@ namespace StudentManagement.Services
                 switch (userChoice)
                 {
                     case 1:
-                        Console.Write("  New Name: ");
+                        Console.WriteLine("Enter new Name");
                         currentStudent.Name = Validator.GetValidName();
                         break;
                     case 2:
-                        Console.Write("  New Age: ");
+                        Console.WriteLine("Enter new Age");
                         currentStudent.Age = Validator.GetValidAge();
                         break;
                     case 3:
-                        Console.Write("  New Email: ");
+                        Console.WriteLine("Enter new Email");
                         currentStudent.Email = Validator.GetValidEmail();
                         break;
                     case 4:
-                        Console.Write("  New Course Name: ");
+                        Console.WriteLine("Enter new Course Name");
                         currentStudent.CourseName = Validator.GetValidCourseName();
                         break;
                     case 5:
-                        Console.Write("  New Grades: ");
+                        Console.WriteLine("Enter new Grades");
                         currentStudent.Grades = Validator.GetValidGrades();
                         break;
                     case 6:
-                        // Correct approach: get new data then copy each property onto the existing object
+                        // Collect a full new set of data, then copy each field onto the
+                        // existing student object so its ID and list reference stay intact.
                         Student updatedData = InputHandler.Get_New_Student_Data();
                         currentStudent.Name = updatedData.Name;
                         currentStudent.Age = updatedData.Age;
@@ -136,64 +142,66 @@ namespace StudentManagement.Services
                 }
             }
 
-            Console.WriteLine("Update Operation Completed Successfully"); ;
+            Console.WriteLine("  Student updated successfully."); ;
         }
+
+        // ── DELETE ───────────────────────────────────────────────────────────
+
         public void DeleteStudent(int std_id)
         {
-            // Bug fixed: guard against null
             Student? currentStudent = FindById(std_id);
             if (currentStudent == null)
             {
-                Console.WriteLine("  [!] Student not found.");
+                Console.WriteLine("  Student not found.");
                 return;
             }
 
-            Console.WriteLine($"  Are you sure you want to delete '{currentStudent.Name}'? (Y/N)");
+            Console.WriteLine($"  Are you sure you want to delete {currentStudent.Name}? (Y/N)");
             char userChoice;
 
-            // Bug fixed: original OR conditions made the loop infinite — any char fails at least one != check
-            // Fix: use AND so the loop only continues when the input is not one of the four valid chars
+            // Loop until the user enters Y or N. The AND condition ensures the loop
+            // exits only when the input is exactly one of the two accepted characters.
             while (!char.TryParse(Console.ReadLine()?.Trim().ToUpper(), out userChoice)
                    || (userChoice != 'Y' && userChoice != 'N'))
             {
-                Console.WriteLine("  [!] Invalid input. Please enter Y or N.");
+                Console.WriteLine("  Invalid input. Please enter Y or N.");
             }
 
             if (userChoice == 'Y')
             {
                 All_Students.Remove(currentStudent);
 
-                // Re-sync all IDs to stay sequential after the gap left by deletion
-                // Note: moved before return — was unreachable in original code
+                // Re-sync IDs so the list stays sequential after the deletion gap.
                 for (int i = 0; i < All_Students.Count; i++)
                     All_Students[i].Id = i + 1;
 
                 // Reset counter to match the new count so next Add gets the correct ID
                 idCounter = All_Students.Count;
 
-                Console.WriteLine("Student deleted successfully.");
+                Console.WriteLine("  Student deleted successfully.");
                 return;
             }
 
-            Console.WriteLine("Deletion cancelled.");
+            Console.WriteLine("  Deletion cancelled.");
         }
 
+        // ── CALCULATE AVERAGE ────────────────────────────────────────────────
         public void CalculateAverage(int std_id)
         {
             Student? student = FindById(std_id);
             if (student == null)
             {
-                Console.WriteLine("  [!] Student not found.");
+                Console.WriteLine("  Student not found.");
                 return;
             }
 
             if (student.Grades.Count == 0)
             {
-                Console.WriteLine($"  '{student.Name}' has no grades recorded.");
+                Console.WriteLine($"  {student.Name} has no grades recorded.");
                 return;
             }
 
-            Console.WriteLine($"  Average grade for {student.Name}: {student.AverageGrade}");
+            Console.WriteLine($"  Average grade for {student.Name}: {student.AverageGrade:F1}");
         }
 
 

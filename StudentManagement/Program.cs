@@ -1,6 +1,5 @@
 ﻿using StudentManagement.Services;
 using StudentManagement.UI;
-using System;
 
 namespace StudentManagement
 {
@@ -27,8 +26,6 @@ namespace StudentManagement
                 {
                     case 1:
                         service.AddStudent();
-                        
-                            
                         break;
 
                     case 2:
@@ -36,17 +33,15 @@ namespace StudentManagement
                         if (int.TryParse(Console.ReadLine(), out int updateId))
                             service.UpdateStudent(updateId);
                         else
-                            Console.WriteLine("     Invalid ID.");
+                            Console.WriteLine("  Invalid ID. Please enter a number.");
                         break;
 
                     case 3:
-                        Console.Write("    Enter Student ID to delete: ");
+                        Console.Write("  Enter Student ID to delete: ");
                         if (int.TryParse(Console.ReadLine(), out int deleteId))
-                        {
                             service.DeleteStudent(deleteId);
-                        }
                         else
-                            Console.WriteLine("     Invalid ID.");
+                            Console.WriteLine("  Invalid ID. Please enter a number.");
                         break;
 
                     case 4:
@@ -54,29 +49,24 @@ namespace StudentManagement
                         if (int.TryParse(Console.ReadLine(), out int avgId))
                             service.CalculateAverage(avgId);
                         else
-                            Console.WriteLine("   Invalid ID.");
+                            Console.WriteLine("  Invalid ID. Please enter a number.");
                         break;
 
                     case 5:
                         Console.Write("  Enter Student ID to search: ");
                         if (int.TryParse(Console.ReadLine(), out int searchId))
-                        {
                             service.SearchStudent(searchId);
-                        }
                         else
-                            Console.WriteLine("   Invalid ID.");
+                            Console.WriteLine("  Invalid ID. Please enter a number.");
                         break;
 
                     case 6:
                         Console.Write("  Enter Student Name to search: ");
                         string? searchName = Console.ReadLine()?.Trim();
                         if (!string.IsNullOrEmpty(searchName))
-                        {
                             service.SearchStudent(searchName);
-
-                        }
                         else
-                            Console.WriteLine("   Name cannot be empty.");
+                            Console.WriteLine("  Name cannot be empty.");
                         break;
 
                     case 7:
@@ -85,7 +75,7 @@ namespace StudentManagement
 
                     case 0:
                         Console.ForegroundColor = ConsoleColor.Green;
-                        Console.WriteLine("Goodbye!");
+                        Console.WriteLine("  Goodbye!");
                         Console.ResetColor();
                         break;
                 }
@@ -93,9 +83,8 @@ namespace StudentManagement
                 if (userChoice != 0)
                 {
                     Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine("\nPress any key to continue...");
+                    Console.WriteLine("\n  Press any key to continue...");
                     Console.ResetColor();
-
                     Console.ReadKey();
                     Console.Clear();
                 }

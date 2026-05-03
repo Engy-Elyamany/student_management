@@ -1,15 +1,12 @@
 ﻿using StudentManagement.Models;
 using StudentManagement.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StudentManagement.UI
 {
     internal class InputHandler
     {
+         // Collects all required fields from the user and returns a fully built Student object.
+        // ID is not set here — it is assigned by StudentService when the student is added.
         public static Student Get_New_Student_Data()
         {
             Console.WriteLine("Enter Student Name");
@@ -26,33 +23,30 @@ namespace StudentManagement.UI
             string course_name = Validator.GetValidCourseName();
 
 
-
-            List<int> std_grades;
-            Console.WriteLine("Enter student Grades");
-            std_grades = Validator.GetValidGrades();
+            Console.WriteLine("Enter Student Grades (comma-separated, e.g. 80,90,75)");
+            List<int> std_grades = Validator.GetValidGrades();
 
             Student new_student = new Student(std_name, std_age, std_email, course_name);
             new_student.Grades = std_grades;
             return new_student;
         }
 
-        public static int GetValidUserChoiceFromMenu(int MenuStart, int MenuRangeEnd)
+        // Reads a menu choice from the user within the given range (inclusive).
+        // Keeps prompting until a valid integer within range is entered.
+        public static int GetValidUserChoiceFromMenu(int menuStart, int menuRangeEnd)
         {
             Console.WriteLine("Please Choose From Menu");
             while (true)
             {
-                if (int.TryParse(Console.ReadLine(), out int Choice))
+                if (int.TryParse(Console.ReadLine(), out int choice))
                 {
-                    if (Choice > MenuRangeEnd || Choice < MenuStart)
-                    {
-                        Console.WriteLine("Invalid Input, out of range, Please choose from Menu ");
-                        continue;
-                    }
-                    return Choice;
+                    if (choice >= menuStart && choice <= menuRangeEnd)
+                        return choice;
+                    Console.WriteLine($"  Please enter a number between {menuStart} and {menuRangeEnd}.");
                 }
                 else
                 {
-                    Console.WriteLine("Invalid Input, please enter only digits");
+                    Console.WriteLine("  Please enter digits only.");
                 }
             }
 

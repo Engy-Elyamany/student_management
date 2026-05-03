@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StudentManagement.Models
+﻿namespace StudentManagement.Models
 {
     internal class Student
     {
@@ -13,9 +7,11 @@ namespace StudentManagement.Models
         public int Age { get; set; }
         public string Email { get; set; }
         public string CourseName { get; set; }
+
+        // Grades are stored as a list of integers, populated after construction.
         public List<int> Grades { get; set; } = new List<int>();
 
-       
+        // Computed from Grades on demand. Returns 0 if no grades have been entered.
         public double AverageGrade
         {
             get
@@ -24,9 +20,10 @@ namespace StudentManagement.Models
             }
         }
 
+        // Formats one student as a fixed-width table row for consistent console display.
         public override string ToString()
         {
-            return $"| {Id} | {Name} | {Age} | {Email} | {CourseName} | {AverageGrade} |";
+            return $"| {Id,-4} | {Name,-20} | {Age,-3} | {Email,-25} | {CourseName,-20} | {AverageGrade,-9:F1} |";
         }
 
 
