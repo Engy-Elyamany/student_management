@@ -28,13 +28,13 @@ namespace StudentManagement.UI
             Console.WriteLine(
             "\n" +
             "Main Menu" +
-            "\n1.Add Student" +
-            "\n2.Update Student" +
-            "\n3.Delete Student" +
-            "\n4.Calculate Student Average Grades" +
-            "\n5.Search By Student Id" +
-            "\n6.Search By Student Name" +
-            "\n7.View All Students");
+            "\n1. Add Student" +
+            "\n2. Update Student" +
+            "\n3. Delete Student" +
+            "\n4. Calculate Student Average Grades" +
+            "\n5. Search By Student Id" +
+            "\n6. Search By Student Name" +
+            "\n7. View All Students");
 
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(
@@ -48,10 +48,10 @@ namespace StudentManagement.UI
             Console.WriteLine(
             "\n" +
             "Choose What to update from Menu" +
-            "\n1.Update Name" +
-            "\n2.Update Age" +
-            "\n3.Update Email" +
-            "\n4.Update Course Name" +
+            "\n1. Update Name" +
+            "\n2. Update Age" +
+            "\n3. Update Email" +
+            "\n4. Update Course Name" +
             "\n5. Update Grades" +
             "\n6. Update All Data");
 

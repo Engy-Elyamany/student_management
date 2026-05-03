@@ -20,7 +20,7 @@ namespace StudentManagement.Models
         {
             get
             {
-                return Grades.Average();
+                return Grades.Count == 0 ? 0 : Grades.Average();
             }
         }
 
